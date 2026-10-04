@@ -1,0 +1,12 @@
+.data/
+.demo-test-data/
+.env
+node_modules/
+tools/*
+!tools/check-postgres.js
+npm-debug.log*
+*.log
+*.local
+*.tmp
+*.sqlite*
+logo_delta.png

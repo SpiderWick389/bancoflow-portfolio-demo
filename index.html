@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06101a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BancoFlow">
+  <meta name="description" content="Demonstração de um sistema de solicitações e gestão de banco de horas.">
+  <title>BancoFlow | Demonstração</title>
+  <link rel="apple-touch-icon" href="bancoflow-mark.png?v=portfolio-v1">
+  <link rel="manifest" href="manifest.json?v=portfolio-v1">
+  <link rel="stylesheet" href="style.css?v=portfolio-v1">
+</head>
+<body class="theme-dark">
+  <section id="loginScreen" class="loginScreen">
+    <form id="loginForm" class="loginCard" autocomplete="on">
+      <div class="loginBrand">
+        <img class="brandLogo" src="bancoflow-mark.png" alt="BancoFlow">
+        <div>
+          <strong>BANCOFLOW</strong>
+          <span>Gestão inteligente de horas</span>
+        </div>
+      </div>
+
+      <div id="authSwitch" class="authSwitch" role="tablist" aria-label="Acesso" data-active-index="0">
+        <button class="authMode active" type="button" data-auth-mode="login">Entrar</button>
+        <button class="authMode" type="button" data-auth-mode="register">Primeiro acesso</button>
+        <button class="authMode" type="button" data-auth-mode="forgot">Esqueci a senha</button>
+      </div>
+
+      <div class="loginCopy">
+        <h1 id="authTitle">Acesso ao sistema</h1>
+        <p id="authSubtitle">Entre para solicitar ou acompanhar banco de horas.</p>
+      </div>
+
+      <div id="demoAccess" class="demoAccess">
+        <div><span>AMBIENTE DE DEMONSTRAÇÃO</span><small>Escolha um perfil para preencher o acesso.</small></div>
+        <div class="demoAccessButtons">
+          <button type="button" data-demo-user="demo">Administrador</button>
+          <button type="button" data-demo-user="ana">Operador</button>
+          <button type="button" data-demo-user="carla">Supervisor</button>
+        </div>
+        <small>Senha comum: <strong>Portfolio#2026</strong></small>
+      </div>
+
+      <div id="loginFields" class="authPanel">
+        <label>Usuário
+          <input id="loginUser" name="username" type="text" placeholder="Seu usuário" autocomplete="username" autocapitalize="none" spellcheck="false">
+        </label>
+        <label>Senha
+          <span class="passwordField">
+            <input id="loginPassword" name="password" type="password" placeholder="Digite sua senha" autocomplete="current-password">
+            <button id="togglePassword" type="button" aria-label="Mostrar senha">Ver</button>
+          </span>
+        </label>
+        <label class="rememberRow">
+          <input id="rememberLogin" name="remember" type="checkbox" checked>
+          <span>Manter meu acesso salvo neste aparelho</span>
+        </label>
+      </div>
+
+      <div id="registerFields" class="authPanel hidden">
+        <div class="formGrid twoCols">
+          <label>Nome completo<input id="registerName" name="name" type="text" placeholder="Seu nome" autocomplete="name"></label>
+          <label>Matrícula<input id="registerRegistration" name="registration" type="text" placeholder="Ex.: 13.000" autocomplete="off"></label>
+          <label>Usuário<input id="registerUser" name="new-username" type="text" placeholder="usuario" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+          <label>E-mail<input id="registerEmail" name="email" type="email" placeholder="email@empresa.com" autocomplete="email"></label>
+          <label>Senha<input id="registerPassword" name="new-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"></label>
+          <label>Confirmar senha<input id="registerPasswordConfirm" name="new-password-confirm" type="password" placeholder="Repita a senha" autocomplete="new-password"></label>
+          <label>Perfil solicitado
+            <select id="registerRole" name="requested-role">
+              <option value="viewer">Operador</option>
+              <option value="monitoring">Monitoramento</option>
+              <option value="leader">Líder de equipe</option>
+              <option value="assistant">Assistente</option>
+              <option value="analyst">Analista</option>
+              <option value="supervisor">Supervisor</option>
+              <option value="coordinator">Coordenador</option>
+            </select>
+          </label>
+          <label id="registerTeamField">Equipe fixa
+            <select id="registerTeam" name="team">
+              <option value="alfa">Aurora</option><option value="bravo">Horizonte</option><option value="charlie">Órbita</option><option value="delta">Prisma</option><option value="echo">Vértice</option>
+            </select>
+          </label>
+        </div>
+        <p class="supportText">O cadastro ficará pendente até a aprovação do administrador.</p>
+      </div>
+
+      <div id="forgotFields" class="authPanel hidden">
+        <label>Usuário ou e-mail<input id="forgotIdentifier" name="forgot-identifier" type="text" placeholder="Usuário ou e-mail" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+        <label>Observação<textarea id="forgotNote" name="forgot-note" placeholder="Ex.: preciso trocar minha senha"></textarea></label>
+        <p class="supportText">O administrador receberá seu pedido de redefinição.</p>
+      </div>
+
+      <div id="loginMessage" class="formMessage" role="alert" aria-live="polite"></div>
+      <button id="loginBtn" class="primaryBtn fullBtn" type="submit">Entrar</button>
+    </form>
+  </section>
+
+  <div id="appShell" class="shell hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="sideBrand">
+        <img class="brandLogo" src="bancoflow-mark.png" alt="BancoFlow">
+        <div><strong>BANCOFLOW</strong><span>PORTFÓLIO DEMO</span></div>
+      </div>
+
+      <nav class="navMenu" aria-label="Menu principal">
+        <button id="dashboardNav" class="navItem active" type="button" data-route="dashboard">
+          <span class="navIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4zM14 20h6V11h-6zM4 20h6v-3H4zM14 7h6V4h-6z"/></svg></span>
+          <span>Visão geral</span>
+        </button>
+        <button id="newRequestNav" class="navItem" type="button" data-route="new-request">
+          <span class="navIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+          <span>Nova solicitação</span>
+        </button>
+        <button id="requestsNav" class="navItem" type="button" data-route="requests">
+          <span class="navIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg></span>
+          <span>Solicitações</span>
+          <span id="pendingNavCount" class="navCount hidden">0</span>
+        </button>
+        <button id="reportsNav" class="navItem" type="button" data-route="reports">
+          <span class="navIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/><circle cx="17.5" cy="6" r="3"/></svg></span>
+          <span>Saldos e relatórios</span>
+        </button>
+        <button id="adminNav" class="navItem hidden" type="button" data-route="admin">
+          <span class="navIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M17 11v6M14 14h6"/></svg></span>
+          <span>Usuários</span>
+        </button>
+      </nav>
+
+      <div class="sidebarBottom">
+        <button id="themeBtn" class="navItem" type="button">
+          <span class="navIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.6 13.2A8 8 0 1 1 10.8 3.4a6.2 6.2 0 0 0 9.8 9.8Z"/></svg></span>
+          <span>Tema</span>
+        </button>
+        <button id="logoutBtn" class="navItem" type="button">
+          <span class="navIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H4M20 4v16"/></svg></span>
+          <span>Sair</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div class="pageHeading">
+          <span id="pageKicker" class="kicker">Banco de horas</span>
+          <h1 id="pageTitle">Visão geral</h1>
+        </div>
+        <div class="topActions">
+          <button id="refreshBtn" class="iconTextBtn" type="button" title="Atualizar dados">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0 1 4M20 4v7h-7"/></svg><span>Atualizar</span>
+          </button>
+          <button id="exportBtn" class="iconTextBtn" type="button" title="Exportar solicitações">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span>Excel</span>
+          </button>
+          <button id="mobileThemeBtn" class="iconBtn mobileOnly" type="button" title="Alternar tema" aria-label="Alternar tema">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.2A8 8 0 1 1 10.8 3.4a6.2 6.2 0 0 0 9.8 9.8Z"/></svg>
+          </button>
+          <button id="notificationBtn" class="iconBtn notificationBtn" type="button" title="Notificações" aria-label="Abrir notificações" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+            <span id="notificationCount" class="notificationCount hidden">0</span>
+          </button>
+          <button id="userMenuBtn" class="userBadge" type="button" aria-expanded="false">
+            <span id="userInitials" class="userAvatar">U</span>
+            <span class="userIdentity"><strong id="currentUserName">Usuário</strong><small id="currentUserRole">Perfil</small></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+          </button>
+          <div id="userMenu" class="userMenu hidden">
+            <button type="button" data-action="profile-photo">Foto de perfil</button>
+            <button type="button" data-action="change-password">Alterar senha</button>
+            <button type="button" data-action="logout">Sair</button>
+          </div>
+          <aside id="notificationPanel" class="notificationPanel hidden" aria-label="Notificações">
+            <div class="notificationHeader"><div><strong>Notificações</strong><small id="notificationSummary">Nenhum aviso novo</small></div><button class="textBtn" type="button" data-action="read-notifications">Marcar como lidas</button></div>
+            <div id="notificationList" class="notificationList"></div>
+            <button id="enableNotificationsBtn" class="notificationPermission hidden" type="button" data-action="enable-notifications">Ativar avisos neste aparelho</button>
+          </aside>
+        </div>
+      </header>
+
+      <section id="dashboardPage" class="page active"></section>
+      <section id="newRequestPage" class="page"></section>
+      <section id="requestsPage" class="page"></section>
+      <section id="reportsPage" class="page"></section>
+      <section id="adminPage" class="page"></section>
+    </main>
+
+    <nav class="mobileNav" aria-label="Menu móvel">
+      <button id="mobileDashboardNav" class="active" type="button" data-route="dashboard"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4zM14 20h6V11h-6zM4 20h6v-3H4zM14 7h6V4h-6z"/></svg></span><span>Início</span></button>
+      <button id="mobileNewRequestNav" type="button" data-route="new-request"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span>Solicitar</span></button>
+      <button id="mobileRequestsNav" type="button" data-route="requests"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg></span><span>Pedidos</span></button>
+      <button id="mobileReportsNav" type="button" data-route="reports"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/><circle cx="17.5" cy="6" r="3"/></svg></span><span>Saldos</span></button>
+      <button id="mobileAdminNav" class="hidden" type="button" data-route="admin"><span class="navIcon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M17 11v6M14 14h6"/></svg></span><span>Usuários</span></button>
+    </nav>
+  </div>
+
+  <div id="toastRegion" class="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalBackdrop" class="modalBackdrop hidden" role="presentation">
+    <section id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></section>
+  </div>
+
+  <script src="app.js?v=portfolio-v1"></script>
+</body>
+</html>

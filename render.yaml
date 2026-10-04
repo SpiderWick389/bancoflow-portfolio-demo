@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: bancoflow-portfolio-demo
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "true"
+      - key: LOGIN_MAX_FAILURES
+        value: "5"
+      - key: LOGIN_IP_MAX_FAILURES
+        value: "50"
+      - key: LOGIN_BLOCK_MS
+        value: "600000"
+      - key: REGISTER_RATE_LIMIT
+        value: "5"
+      - key: MAX_PUBLIC_BODY_BYTES
+        value: "64000"
+      - key: DATA_DIR
+        value: /tmp/bancoflow-demo
+      - key: STORAGE_MODE
+        value: sqlite
+      - key: REQUIRE_FIREBASE
+        value: "false"
+      - key: DEMO_MODE
+        value: "true"
+      - key: APP_NAME
+        value: BancoFlow Demo
+      - key: SESSION_SECRET
+        generateValue: true

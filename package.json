@@ -1,0 +1,19 @@
+{
+  "name": "bancoflow-portfolio-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demonstração de um sistema de solicitações, aprovações e controle de banco de horas.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check app.js && node --check sw.js && node --check tools/check-postgres.js",
+    "test": "node --test test/*.test.js",
+    "db:check": "node tools/check-postgres.js"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "BancoFlow | Demonstração",
+  "short_name": "BancoFlow",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#030910",
+  "theme_color": "#06101a",
+  "icons": [
+    {
+      "src": "bancoflow-mark.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "bancoflow-mark.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
