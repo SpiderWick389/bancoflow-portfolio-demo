@@ -2,6 +2,22 @@
 
 Versao demonstrativa e independente de um sistema de banco de horas. Todos os nomes, matriculas, e-mails, equipes, saldos e solicitacoes desta copia sao ficticios.
 
+## Demonstracao online
+
+https://bancoflow-portfolio-demo.onrender.com
+
+O BancoFlow apresenta um fluxo completo de solicitacao e aprovacao, calendario com limite diario, saldos individuais, perfis de acesso, notificacoes e relatorios para Excel em uma interface responsiva.
+
+## Principais recursos
+
+- Fluxos de aprovacao diferentes por perfil.
+- Controle de saldo em horas e minutos, incluindo limite negativo.
+- Calendario inteligente com ocupacao por data.
+- Perfis de administrador, operador, lider, supervisor, coordenador, analista, assistente, monitoramento e ajuste de horas.
+- Dashboard responsivo, temas claro e escuro e navegacao mobile.
+- Exportacao de solicitacoes e saldos para Excel.
+- Dados demonstrativos isolados, sem conexao com sistemas corporativos.
+
 ## Acessos demonstrativos
 
 Senha comum: `Portfolio#2026`
