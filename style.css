@@ -595,9 +595,9 @@ body.theme-light .primaryBtn { color: #fff; }
   background: var(--surface);
   box-shadow: var(--shadow);
 }
-.calendarHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+.calendarHeader { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
 .calendarHeader h2 { margin: 0; font-size: 1.2rem; }
-.calendarControls { display: flex; align-items: center; gap: 7px; }
+.calendarControls { display: flex; max-width: 100%; align-items: center; gap: 7px; margin-left: auto; }
 .calendarControls strong { min-width: 126px; color: var(--muted-strong); font-size: .78rem; text-align: center; text-transform: capitalize; }
 .calendarControls .iconBtn { width: 34px; min-height: 34px; height: 34px; padding: 4px; font-size: 1.3rem; }
 .calendarWeekdays, .calendarGrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
@@ -882,7 +882,7 @@ body.modalOpen { overflow: hidden; }
   .balanceSearch { grid-template-columns: 1fr; justify-content: stretch; }
   .balanceHistory { grid-template-columns: 1fr 1fr; }
   .calendarHeader { display: grid; }
-  .calendarControls { justify-content: space-between; }
+  .calendarControls { width: 100%; justify-content: space-between; margin-left: 0; }
   .toastRegion { right: 12px; bottom: 106px; left: 12px; }
   .toast { min-width: 0; max-width: none; }
   .modal { padding: 18px; }

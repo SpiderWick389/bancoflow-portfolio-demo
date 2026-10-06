@@ -1330,5 +1330,5 @@ applyTheme(localStorage.getItem(THEME_KEY) || "dark");
 hydrateSession();
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js?v=portfolio-v2").catch(() => {}));
+  window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js?v=portfolio-v3").catch(() => {}));
 }
