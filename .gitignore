@@ -1,5 +1,6 @@
 .data/
 .demo-test-data/
+.demo-preview-data/
 .env
 node_modules/
 tools/*

@@ -1,5 +1,5 @@
-const CACHE = "bancoflow-portfolio-v1";
-const VERSION = "portfolio-v1";
+const CACHE = "bancoflow-portfolio-v2";
+const VERSION = "portfolio-v2";
 const ASSETS = [
   "./",
   "./index.html",

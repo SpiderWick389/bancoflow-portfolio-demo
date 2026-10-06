@@ -8,6 +8,8 @@ https://bancoflow-portfolio-demo.onrender.com
 
 O BancoFlow apresenta um fluxo completo de solicitacao e aprovacao, calendario com limite diario, saldos individuais, perfis de acesso, notificacoes e relatorios para Excel em uma interface responsiva.
 
+A base ficticia e restaurada quando um dos acessos demonstrativos entra no sistema e tambem a cada hora. Assim, exclusoes, trocas de senha e testes feitos por um visitante nao quebram a experiencia do proximo.
+
 ## Principais recursos
 
 - Fluxos de aprovacao diferentes por perfil.

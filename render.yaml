@@ -29,6 +29,8 @@ services:
         value: "false"
       - key: DEMO_MODE
         value: "true"
+      - key: DEMO_RESET_INTERVAL_MS
+        value: "3600000"
       - key: APP_NAME
         value: BancoFlow Demo
       - key: SESSION_SECRET

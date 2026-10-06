@@ -16,6 +16,8 @@ loadEnv();
 const APP_NAME = process.env.APP_NAME || "BancoFlow Demo";
 const DEMO_MODE = String(process.env.DEMO_MODE || "false").toLowerCase() === "true";
 const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "Portfolio#2026";
+const DEMO_RESET_INTERVAL_MS = positiveInteger(process.env.DEMO_RESET_INTERVAL_MS, 60 * 60 * 1000);
+const DEMO_LOGIN_IDENTIFIERS = new Set(["demo", "demo@portfolio.local", "ana", "ana@portfolio.local", "carla", "carla@portfolio.local"]);
 const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(ROOT, ".data"));
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const STATE_FILE = path.join(DATA_DIR, "state.json");
@@ -102,10 +104,13 @@ start().catch((error) => {
 });
 
 let cleanupTimer = null;
+let demoResetTimer = null;
 
 async function start() {
-  ensureStore();
+  if (DEMO_MODE) seedDemoStore();
+  else ensureStore();
   await initDatabase();
+  if (DEMO_MODE) resetDemoStore();
   if (syncUsersToState(readUsers())) await flushDatabaseWrites();
   loadSessions();
   server.listen(PORT, "0.0.0.0", () => {
@@ -113,11 +118,18 @@ async function start() {
   });
   cleanupTimer = setInterval(cleanSecurityState, 1000 * 60 * 15);
   cleanupTimer.unref();
+  if (DEMO_MODE) {
+    demoResetTimer = setInterval(() => {
+      serializeStateMutation(() => resetDemoStore()).catch((error) => console.error("[BANCOFLOW] Falha ao restaurar demonstracao:", error.message));
+    }, DEMO_RESET_INTERVAL_MS);
+    demoResetTimer.unref();
+  }
 }
 
 async function shutdown(signal) {
   console.log(`[BANCOFLOW] Encerrando com ${signal}...`);
   if (cleanupTimer) clearInterval(cleanupTimer);
+  if (demoResetTimer) clearInterval(demoResetTimer);
   try {
     await firestoreWrites;
     await postgresWrites;
@@ -178,6 +190,8 @@ function ensureStore() {
 }
 
 function seedDemoStore() {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.mkdirSync(BACKUP_DIR, { recursive: true });
   const demoUsers = [
     demoUser("demo-admin", "Marina Costa", "demo", "demo@portfolio.local", "ADM-001", "admin", ""),
     demoUser("demo-ana", "Ana Ribeiro", "ana", "ana@portfolio.local", "1001", "viewer", "alfa"),
@@ -256,6 +270,17 @@ function seedDemoStore() {
   fs.writeFileSync(USERS_FILE, JSON.stringify(demoUsers, null, 2));
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
   console.log("[BANCOFLOW] Base demonstrativa criada com dados ficticios.");
+  return { users: demoUsers, state };
+}
+
+function resetDemoStore() {
+  if (!DEMO_MODE) return;
+  const { users, state } = seedDemoStore();
+  writeUsers(users);
+  writeState(state);
+  writeNotifications([]);
+  writeAccessLogs([]);
+  writeChangeLogs([]);
 }
 
 function demoUser(id, name, username, email, registration, role, teamId) {
@@ -750,6 +775,7 @@ async function handleApi(req, res, url) {
     const body = await readJson(req, MAX_PUBLIC_BODY_BYTES);
     const identifier = String(body.identifier || body.user || "").trim().toLowerCase();
     const password = String(body.password || "");
+    if (DEMO_MODE && DEMO_LOGIN_IDENTIFIERS.has(identifier)) resetDemoStore();
     const users = readUsers();
     const user = users.find((item) =>
       [item.username, item.email].filter(Boolean).map((v) => String(v).toLowerCase()).includes(identifier)
@@ -1432,7 +1458,8 @@ function positiveInteger(value, fallback) {
 
 function isStateMutationRequest(req, url) {
   if (!["POST", "PUT", "PATCH", "DELETE"].includes(req.method)) return false;
-  return url.pathname === "/api/register"
+  return url.pathname === "/api/login"
+    || url.pathname === "/api/register"
     || url.pathname === "/api/profile"
     || url.pathname === "/api/state"
     || url.pathname === "/api/change-password"
@@ -2180,8 +2207,8 @@ function appendAccessLog(req, user, action) {
     at: new Date().toISOString(),
     action,
     user: publicLogUser(user),
-    ip: clientIp(req),
-    userAgent: cleanText(req.headers["user-agent"], 300)
+    ip: DEMO_MODE ? "oculto-na-demo" : clientIp(req),
+    userAgent: DEMO_MODE ? "navegador-da-demo" : cleanText(req.headers["user-agent"], 300)
   });
   writeAccessLogs(logs);
 }
@@ -2220,8 +2247,8 @@ function appendChangeLog(req, user, change) {
     next: cleanText(item.next, 120),
     targetUser: item.targetUser ? publicLogUser(item.targetUser) : null,
     user: publicLogUser(user),
-    ip: clientIp(req),
-    userAgent: cleanText(req.headers["user-agent"], 300)
+    ip: DEMO_MODE ? "oculto-na-demo" : clientIp(req),
+    userAgent: DEMO_MODE ? "navegador-da-demo" : cleanText(req.headers["user-agent"], 300)
   });
   writeChangeLogs(logs);
 }
